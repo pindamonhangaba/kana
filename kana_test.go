@@ -170,3 +170,19 @@ func TestNormalizeRomaji(t *testing.T) {
 		}
 	}
 }
+
+func TestHiraganaToKatakana(t *testing.T) {
+	for i, kana := range hiraganaList {
+		if got := HiraganaToKatakana(kana); got != katakanaList[i] {
+			t.Errorf("HiraganaToKatakana(%q) = %q, want %q", kana, got, katakanaList[i])
+		}
+	}
+}
+
+func TestKatakanaToHiragana(t *testing.T) {
+	for i, kana := range katakanaList {
+		if got := KatakanaToHiragana(kana); got != hiraganaList[i] {
+			t.Errorf("KatakanaToHiragana(%q) = %q, want %q", kana, got, hiraganaList[i])
+		}
+	}
+}
