@@ -16,6 +16,8 @@ var (
 	kanaToRomajiTrie     *Trie
 	romajiToHiraganaTrie *Trie
 	romajiToKatakanaTrie *Trie
+	hiraganaList         []string
+	katakanaList         []string
 )
 
 // Initialize builds the Hiragana + Katakana trie.
@@ -25,6 +27,8 @@ func Initialize() {
 	kanaToRomajiTrie = newTrie()
 	romajiToHiraganaTrie = newTrie()
 	romajiToKatakanaTrie = newTrie()
+	hiraganaList = []string{}
+	katakanaList = []string{}
 
 	tables := []string{HiraganaTable, KatakanaTable}
 	for t, table := range tables {
@@ -42,8 +46,10 @@ func Initialize() {
 						kanaToRomajiTrie.insert(singleKana, value)
 						if t == 0 {
 							romajiToHiraganaTrie.insert(value, singleKana)
+							hiraganaList = append(hiraganaList, singleKana)
 						} else if t == 1 {
 							romajiToKatakanaTrie.insert(value, singleKana)
+							katakanaList = append(katakanaList, singleKana)
 						}
 					}
 				}
@@ -170,4 +176,24 @@ func NormalizeRomaji(s string) (romaji string) {
 	)
 
 	return romaji
+}
+
+func HiraganaToKatakana(hiragana string) (katakana string) {
+	for i, kana := range hiraganaList {
+		if kana == hiragana {
+			katakana = katakanaList[i]
+			break
+		}
+	}
+	return katakana
+}
+
+func KatakanaToHiragana(katakana string) (hiragana string) {
+	for i, kana := range katakanaList {
+		if kana == katakana {
+			hiragana = hiraganaList[i]
+			break
+		}
+	}
+	return hiragana
 }
